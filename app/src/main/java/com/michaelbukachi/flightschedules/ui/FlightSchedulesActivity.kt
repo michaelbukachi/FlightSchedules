@@ -1,7 +1,8 @@
-package com.michaelbukachi.flightschedules
+package com.michaelbukachi.flightschedules.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.michaelbukachi.flightschedules.R
 
 class FlightSchedulesActivity : AppCompatActivity() {
 
