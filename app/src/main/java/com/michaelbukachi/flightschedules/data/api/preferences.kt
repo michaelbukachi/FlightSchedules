@@ -4,7 +4,7 @@ import com.chibatching.kotpref.KotprefModel
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-const val DATE_FORMAT = "DD MM YYYY HH:mm:ss"
+const val DATE_FORMAT = "dd MM YYYY HH:mm:ss"
 
 object Auth : KotprefModel() {
     var accessToken by stringPref("")

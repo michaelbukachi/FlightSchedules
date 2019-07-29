@@ -1,16 +1,16 @@
 package com.michaelbukachi.flightschedules.data.api
 
-import com.michaelbukachi.flightschedules.data.api.payload.AuthPayload
 import com.michaelbukachi.flightschedules.data.api.response.TokenResponse
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface LuftService {
-    @Headers("Content-Type: application/x-www-form-urlencoded")
+
+    @FormUrlEncoded
     @POST("oauth/token")
-    suspend fun getAccessToken(@Body payload: AuthPayload): TokenResponse
+    suspend fun getAccessToken(@FieldMap payload: Map<String, String>): TokenResponse
 
     suspend fun getAirports()
 }

@@ -13,16 +13,10 @@ val testContext = module {
     single { InstrumentationRegistry.getInstrumentation().context }
 }
 
-object RestServiceTestHelper {
-    fun getStringFromFile(filepath: String): String {
-        return this::class.java.classLoader?.getResource(filepath)?.readText() ?: ""
-    }
-}
-
-fun MockWebServer.res(code: Int, filepath: String) {
+fun MockWebServer.res(code: Int, body: String) {
     enqueue(MockResponse().apply {
         setResponseCode(code)
-        setBody(RestServiceTestHelper.getStringFromFile(filepath))
+        setBody(body)
     })
 }
 
@@ -39,10 +33,9 @@ class MockServerRule : TestRule {
         return object : Statement() {
             override fun evaluate() {
                 server = MockWebServer()
-                server.start()
-                val mockModule = module {
-                    single(override = true) { server.url("/") }
-                }
+                server.url("/")
+//                server.start()
+
 //                startKoin { modules(listOf(testContext, dataModules, mockModule)) }
                 base?.evaluate()
 //                stopKoin()

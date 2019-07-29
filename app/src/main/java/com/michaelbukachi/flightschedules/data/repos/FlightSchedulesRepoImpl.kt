@@ -4,7 +4,6 @@ import android.content.Context
 import com.michaelbukachi.flightschedules.R
 import com.michaelbukachi.flightschedules.data.api.ApiService
 import com.michaelbukachi.flightschedules.data.api.Auth
-import com.michaelbukachi.flightschedules.data.api.payload.AuthPayload
 import org.threeten.bp.LocalDateTime
 import retrofit2.HttpException
 import timber.log.Timber
@@ -15,9 +14,10 @@ class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Conte
 
     override suspend fun refreshToken() {
         try {
-            val payload = AuthPayload(
-                context.getString(R.string.lufthansa_key),
-                context.getString(R.string.lufthansa_secret), "client_credentials"
+            val payload = mutableMapOf(
+                "client_id" to context.getString(R.string.lufthansa_key),
+                "client_secret" to context.getString(R.string.lufthansa_secret),
+                "grant_type" to "client_credentials"
             )
             val response = luftService.getAccessToken(payload)
             var now = LocalDateTime.now()
