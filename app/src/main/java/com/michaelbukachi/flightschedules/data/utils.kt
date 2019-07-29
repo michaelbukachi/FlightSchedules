@@ -1,6 +1,5 @@
 package com.michaelbukachi.flightschedules.data
 
-import com.michaelbukachi.flightschedules.data.api.Auth
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol

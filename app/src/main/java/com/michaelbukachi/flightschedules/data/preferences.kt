@@ -1,4 +1,4 @@
-package com.michaelbukachi.flightschedules.data.api
+package com.michaelbukachi.flightschedules.data
 
 import com.chibatching.kotpref.KotprefModel
 import org.threeten.bp.LocalDateTime

@@ -2,13 +2,18 @@ package com.michaelbukachi.flightschedules.data.repos
 
 import android.content.Context
 import com.michaelbukachi.flightschedules.R
+import com.michaelbukachi.flightschedules.data.Auth
+import com.michaelbukachi.flightschedules.data.api.Airport
 import com.michaelbukachi.flightschedules.data.api.ApiService
-import com.michaelbukachi.flightschedules.data.api.Auth
+import com.michaelbukachi.flightschedules.data.api.FlightSchedule
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.HttpException
 import timber.log.Timber
 
 class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Context) : FlightSchedulesRepo {
+
 
     private val luftService = apiService.luftService
 
@@ -30,11 +35,31 @@ class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Conte
         }
     }
 
-    override suspend fun getAirports() {
+    override suspend fun getAirports(): List<Airport> {
         if (Auth.hasExpired()) {
             refreshToken()
         }
 
+        return try {
+            luftService.getAirports().airports
+        } catch (e: HttpException) {
+            Timber.e("${e.code()} ${e.message()}")
+            emptyList()
+        }
+    }
 
+    override suspend fun getFlightSchedules(origin: String, destination: String): List<FlightSchedule> {
+        if (Auth.hasExpired()) {
+            refreshToken()
+        }
+
+        val tomorrow = LocalDate.now().plusDays(1)
+        val formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd")
+        return try {
+            luftService.getFlightSchedules(origin, destination, formatter.format(tomorrow)).schedule
+        } catch (e: HttpException) {
+            Timber.e("${e.code()} ${e.message()}")
+            emptyList()
+        }
     }
 }

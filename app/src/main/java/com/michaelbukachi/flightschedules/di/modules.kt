@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder
 import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.AuthInterceptor
 import com.michaelbukachi.flightschedules.data.TimeoutInterceptor
-import com.michaelbukachi.flightschedules.data.api.ApiService
+import com.michaelbukachi.flightschedules.data.api.*
 import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepo
 import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepoImpl
 import okhttp3.HttpUrl
@@ -34,7 +34,10 @@ val dataModules = module {
     }
 
     single {
-        GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+            .registerTypeAdapter(AirportResponse::class.java, airportsDeserializer)
+            .registerTypeAdapter(ScheduleResponse::class.java, scheduleDeserializer)
+            .create()
     }
 
     factory { BuildConfig.API_BASE_URL.toHttpUrl() }
