@@ -9,24 +9,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.michaelbukachi.flightschedules.R
 import com.michaelbukachi.flightschedules.data.api.FlightSchedule
 import kotlinx.android.synthetic.main.schedule_list_item.view.*
+import timber.log.Timber
 
-class FlightSchedulesAdapter(var schedules: List<FlightSchedule>, val listener: OnClickListener) :
+class FlightSchedulesAdapter(schedules: List<FlightSchedule>, private val listener: OnClickListener) :
     RecyclerView.Adapter<FlightSchedulesAdapter.ScheduleViewHolder>() {
+
+    private val schedulesList = ArrayList<FlightSchedule>()
+
+    init {
+        schedulesList.addAll(schedules)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.schedule_list_item, parent, false)
         return ScheduleViewHolder(view)
     }
 
-    fun updateData(newSchedules: List<FlightSchedule>) {
-        schedules = newSchedules
+    fun updateData(schedules: List<FlightSchedule>) {
+        Timber.i("List size: ${schedules.size}")
+        schedulesList.clear()
+        schedulesList.addAll(schedules)
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = schedules.size
+    override fun getItemCount(): Int = schedulesList.size
 
     override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
-        val schedule = schedules[position]
+        val schedule = schedulesList[position]
         val firstPoint = schedule.points[0]
         val lastPoint = schedule.points.last()
         holder.destination?.text = "${firstPoint.departureAirport} (${firstPoint.departureTime})"

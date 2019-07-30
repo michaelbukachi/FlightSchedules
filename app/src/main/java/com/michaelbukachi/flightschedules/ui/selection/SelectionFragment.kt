@@ -42,19 +42,26 @@ class SelectionFragment : Fragment() {
         }
         val adapter = FlightSchedulesAdapter(emptyList(), listener)
         origin.setOnItemSelectedListener { _, _, _, item ->
-            viewModel.setOriginAirport(item as String)
-            viewModel.fetchSchedules()
+            val selection = item as String
+            if (viewModel.getOriginAirportCode() == null || !selection.contains(viewModel.getOriginAirportCode()!!)) {
+                viewModel.setOriginAirport(selection)
+                viewModel.fetchSchedules()
+            }
+
         }
         destination.setOnItemSelectedListener { _, _, _, item ->
-            viewModel.setDestinationAirport(item as String)
-            viewModel.fetchSchedules()
+            val selection = item as String
+            if (viewModel.getDestinationAirportCode() == null || !selection.contains(viewModel.getDestinationAirportCode()!!)) {
+                viewModel.setDestinationAirport(selection)
+                viewModel.fetchSchedules()
+            }
         }
 
         schedulesList.setHasFixedSize(true)
         schedulesList.adapter = adapter
 
         viewModel.showMessage.observe(this, Observer {
-            Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(container, it, Snackbar.LENGTH_SHORT).show()
         })
 
         viewModel.isLoading.observe(this, Observer {
@@ -73,11 +80,11 @@ class SelectionFragment : Fragment() {
                 blank.visibility = View.VISIBLE
             } else {
                 blank.visibility = View.GONE
-                adapter.updateData(it)
             }
+            adapter.updateData(it)
         })
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenCreated {
             viewModel.isLoading.value = true
             viewModel.fetchAirports()
             viewModel.isLoading.value = false

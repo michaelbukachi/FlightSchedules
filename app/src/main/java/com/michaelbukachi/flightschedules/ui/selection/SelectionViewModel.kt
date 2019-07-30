@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) : ViewModel() {
 
     val showMessage = SingleLiveEvent<String>()
+    val reset = SingleLiveEvent<Void>()
     val isLoading = MutableLiveData<Boolean>()
     val airportsFetched = MutableLiveData<List<String>>()
     val flightSchedule = MutableLiveData<List<FlightSchedule>>()
@@ -30,6 +31,7 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
             originAirport = airports[0]
             destinationAirport = airports[0]
             airportsFetched.postValue(airports.map {
+                println("sdfsdfsdfsdfsdfs")
                 val string = "${it.name} (${it.code})"
                 airportsByCode[it.code] = it
                 airportNames[string] = it.code
@@ -38,6 +40,7 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
         } else {
             showMessage.postValue("No data found.")
         }
+        flightSchedule.postValue(emptyList())
 
     }
 
@@ -59,6 +62,10 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
             }
         }
     }
+
+    fun getOriginAirportCode(): String? = originAirport?.code
+
+    fun getDestinationAirportCode(): String? = originAirport?.code
 
     fun setOriginAirport(code: String) {
         originAirport = airportsByCode[airportNames[code]]!!
