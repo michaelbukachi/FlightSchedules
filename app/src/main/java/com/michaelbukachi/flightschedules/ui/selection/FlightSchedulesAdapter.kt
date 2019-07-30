@@ -9,11 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.michaelbukachi.flightschedules.R
 import com.michaelbukachi.flightschedules.data.api.FlightSchedule
 import kotlinx.android.synthetic.main.schedule_list_item.view.*
+import org.threeten.bp.Duration
+import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 
 class FlightSchedulesAdapter(schedules: List<FlightSchedule>, private val listener: OnClickListener) :
     RecyclerView.Adapter<FlightSchedulesAdapter.ScheduleViewHolder>() {
 
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     private val schedulesList = ArrayList<FlightSchedule>()
 
     init {
@@ -38,34 +42,36 @@ class FlightSchedulesAdapter(schedules: List<FlightSchedule>, private val listen
         val schedule = schedulesList[position]
         val firstPoint = schedule.points[0]
         val lastPoint = schedule.points.last()
-        holder.destination?.text = "${firstPoint.departureAirport} (${firstPoint.departureTime})"
-        holder.arrival?.text = "${lastPoint.arrivalAirport} (${lastPoint.arrivalTime})"
-        holder.airlineId?.text = "${firstPoint.airlineId}"
-        holder.flightNo?.text = "${firstPoint.flightNo}"
-        if (schedule.isDirect) {
-            holder.direct?.visibility = View.VISIBLE
-        } else {
-            holder.direct?.visibility = View.GONE
-        }
+        holder.flight?.text = "${firstPoint.airlineId} ${firstPoint.flightNo}"
+        holder.airports?.text = "${firstPoint.departureAirport}\u00B7${lastPoint.arrivalAirport}"
+        val depTime = formatter.parse(firstPoint.departureTime)
+        val arrTime = formatter.parse(lastPoint.arrivalTime)
+        val time = timeFormatter.format(depTime) + "-" + timeFormatter.format(arrTime)
+        holder.time?.text = time
+        holder.stops?.text = if (schedule.isDirect) "_" else "${schedule.points.size - 1}"
+        val duration = Duration.parse(schedule.duration)
+        val minutes = duration.toMinutes() % 60
+        val hours = duration.toHours()
+        holder.duration?.text = "${hours}h ${minutes}m"
         holder.container?.setOnClickListener {
             listener.onClick(schedule)
         }
     }
 
     class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var destination: TextView? = null
-        var arrival: TextView? = null
-        var airlineId: TextView? = null
-        var flightNo: TextView? = null
-        var direct: TextView? = null
+        var flight: TextView? = null
+        var airports: TextView? = null
+        var time: TextView? = null
+        var stops: TextView? = null
+        var duration: TextView? = null
         var container: CardView? = null
 
         init {
-            destination = view.departure
-            arrival = view.arrival
-            airlineId = view.airlineId
-            flightNo = view.flightNo
-            direct = view.direct
+            flight = view.flight
+            airports = view.airports
+            time = view.time
+            stops = view.stops
+            duration = view.duration
             container = view.container
         }
 

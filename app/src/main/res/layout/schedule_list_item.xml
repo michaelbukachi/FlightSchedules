@@ -16,78 +16,79 @@
         android:padding="4dp">
 
         <TextView
-            android:id="@+id/depLbl"
+            android:id="@+id/flight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Departure:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:text="SU 2996" />
+
+        <TextView
+            android:id="@+id/airports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            tools:text="AAA\u00B7BBB" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/airports"
+            tools:text="10:00-12:00" />
+
+        <TextView
+            android:id="@+id/stopsLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/stops"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/departure"
+            android:id="@+id/stops"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            card_view:layout_constraintStart_toEndOf="@id/depLbl"
-            card_view:layout_constraintTop_toTopOf="parent"
-            tools:text="ZHR" />
-
-        <TextView
-            android:id="@+id/arrLbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Arrival:"
+            android:textSize="18sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@id/depLbl" />
+            card_view:layout_constraintTop_toBottomOf="@id/stopsLbl"
+            tools:text="_" />
 
         <TextView
-            android:id="@+id/arrival"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            card_view:layout_constraintStart_toEndOf="@id/arrLbl"
-            card_view:layout_constraintTop_toBottomOf="@id/depLbl"
-            tools:text="CND" />
-
-        <TextView
-            android:id="@+id/airlineId"
+            android:id="@+id/durationLbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:textSize="18sp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@id/flightNo"
-            card_view:layout_constraintTop_toTopOf="parent"
-            tools:text="LH" />
-
-        <TextView
-            android:id="@+id/flightNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textSize="18sp"
+            android:text="@string/duration"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            tools:text="1709" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/direct"
+            android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="D"
-            android:textColor="@color/colorPrimaryDark"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="18sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/stopsLbl"
+            tools:text="1H 30M" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
