@@ -17,6 +17,13 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.michaelbukachi.flightschedules.ui.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        android:label="Flight Path"
+        tools:layout="@layout/fragment_map">
+        <argument
+            android:name="origin"
+            app:argType="com.michaelbukachi.flightschedules.data.api.Airport" />
+        <argument
+            android:name="destination"
+            app:argType="com.michaelbukachi.flightschedules.data.api.Airport" />
+    </fragment>
 </navigation>

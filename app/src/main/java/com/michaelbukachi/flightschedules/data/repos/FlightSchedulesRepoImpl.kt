@@ -1,7 +1,7 @@
 package com.michaelbukachi.flightschedules.data.repos
 
 import android.content.Context
-import com.michaelbukachi.flightschedules.R
+import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.Auth
 import com.michaelbukachi.flightschedules.data.api.Airport
 import com.michaelbukachi.flightschedules.data.api.ApiService
@@ -20,8 +20,8 @@ class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Conte
     override suspend fun refreshToken() {
         try {
             val payload = mutableMapOf(
-                "client_id" to context.getString(R.string.lufthansa_key),
-                "client_secret" to context.getString(R.string.lufthansa_secret),
+                "client_id" to BuildConfig.LUFTHANSA_KEY,
+                "client_secret" to BuildConfig.LUTFHANSA_SECRET,
                 "grant_type" to "client_credentials"
             )
             val response = luftService.getAccessToken(payload)

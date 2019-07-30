@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.michaelbukachi.flightschedules.R
 import com.michaelbukachi.flightschedules.data.api.FlightSchedule
 import kotlinx.android.synthetic.main.fragment_selection.*
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 
 
 class SelectionFragment : Fragment() {
@@ -32,16 +32,21 @@ class SelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val listener = object : OnClickListener {
             override fun onClick(schedule: FlightSchedule) {
-                Timber.i("Clicked")
+                findNavController().navigate(
+                    SelectionFragmentDirections.actionSelectionFragmentToMapFragment(
+                        viewModel.originAirport!!,
+                        viewModel.destinationAirport!!
+                    )
+                )
             }
         }
         val adapter = FlightSchedulesAdapter(emptyList(), listener)
         origin.setOnItemSelectedListener { _, _, _, item ->
-            viewModel.originAirportCode = viewModel.airportCodes[item as String]!!
+            viewModel.setOriginAirport(item as String)
             viewModel.fetchSchedules()
         }
         destination.setOnItemSelectedListener { _, _, _, item ->
-            viewModel.destinationAirportCode = viewModel.airportCodes[item as String]!!
+            viewModel.setDestinationAirport(item as String)
             viewModel.fetchSchedules()
         }
 

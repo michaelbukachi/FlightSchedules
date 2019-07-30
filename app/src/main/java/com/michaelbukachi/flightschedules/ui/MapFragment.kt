@@ -1,21 +1,26 @@
 package com.michaelbukachi.flightschedules.ui
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.michaelbukachi.flightschedules.R
 
 
 class MapFragment : Fragment() {
+
+    private val args by navArgs<MapFragmentArgs>()
 
     private lateinit var mMap: GoogleMap
     /**
@@ -31,9 +36,34 @@ class MapFragment : Fragment() {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val origin = LatLng(args.origin.latitude.toDouble(), args.origin.longitude.toDouble())
+        val destination = LatLng(args.destination.latitude.toDouble(), args.destination.longitude.toDouble())
+        val originMarker = mMap.addMarker(
+            MarkerOptions()
+                .position(origin)
+                .title("${args.origin.name} (${args.origin.code})")
+                .draggable(false)
+        )
+        val destinationMarker = mMap.addMarker(
+            MarkerOptions()
+                .position(destination)
+                .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                .title("${args.destination.name} (${args.destination.code})")
+                .draggable(false)
+        )
+        mMap.addPolyline(
+            PolylineOptions()
+                .add(origin)
+                .add(destination)
+                .width(8f).color(Color.RED)
+        )
+        val bounds = LatLngBounds.Builder().include(origin).include(destination).build()
+        val width = resources.displayMetrics.widthPixels
+        val height = resources.displayMetrics.heightPixels
+        val padding = (width * 0.10).toInt()
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        mMap.animateCamera(cu)
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     override fun onCreateView(
@@ -46,6 +76,26 @@ class MapFragment : Fragment() {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(onMapReadyCallback)
         return view
+    }
+
+    override fun onDestroyView() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        setHasOptionsMenu(false)
+        super.onDestroyView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            activity?.onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

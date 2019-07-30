@@ -17,6 +17,8 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField('String', 'LUFTHANSA_KEY', LUFTHANSA_KEY)
+        buildConfigField('String', 'LUTFHANSA_SECRET', LUTFHANSA_SECRET)
     }
     buildTypes {
         debug {
@@ -30,6 +32,10 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+
+    androidExtensions {
+        experimental = true
     }
 }
 

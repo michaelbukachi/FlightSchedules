@@ -1,12 +1,15 @@
 package com.michaelbukachi.flightschedules.data.api
 
+import android.os.Parcelable
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonObject
+import kotlinx.android.parcel.Parcelize
 
 data class AirportResponse(val airports: List<Airport>)
 
-data class Airport(val code: String, val name: String, val latitude: Float, val longitude: Float)
+@Parcelize
+data class Airport(val code: String, val name: String, val latitude: Float, val longitude: Float) : Parcelable
 
 val airportsDeserializer = JsonDeserializer { json, _, _ ->
     val finalList = mutableListOf<Airport>()

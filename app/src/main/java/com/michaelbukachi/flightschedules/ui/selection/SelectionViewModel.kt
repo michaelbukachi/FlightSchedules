@@ -3,6 +3,7 @@ package com.michaelbukachi.flightschedules.ui.selection
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.michaelbukachi.flightschedules.data.api.Airport
 import com.michaelbukachi.flightschedules.data.api.FlightSchedule
 import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepo
 import com.michaelbukachi.flightschedules.utils.SingleLiveEvent
@@ -16,18 +17,22 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
     val isLoading = MutableLiveData<Boolean>()
     val airportsFetched = MutableLiveData<List<String>>()
     val flightSchedule = MutableLiveData<List<FlightSchedule>>()
-    val airportCodes = mutableMapOf<String, String>()
-    var originAirportCode = ""
-    var destinationAirportCode = ""
+    private var airports = emptyList<Airport>()
+    private var airportsByCode = mutableMapOf<String, Airport>()
+    private val airportNames = mutableMapOf<String, String>()
+    var originAirport: Airport? = null
+    var destinationAirport: Airport? = null
+
 
     suspend fun fetchAirports() = withContext(Dispatchers.IO) {
-        val airports = flightSchedulesRepo.getAirports()
+        airports = flightSchedulesRepo.getAirports()
         if (airports.isNotEmpty()) {
-            originAirportCode = airports[0].code
-            destinationAirportCode = airports[0].code
+            originAirport = airports[0]
+            destinationAirport = airports[0]
             airportsFetched.postValue(airports.map {
                 val string = "${it.name} (${it.code})"
-                airportCodes[string] = it.code
+                airportsByCode[it.code] = it
+                airportNames[string] = it.code
                 string
             })
         } else {
@@ -37,14 +42,14 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
     }
 
     fun fetchSchedules() = viewModelScope.launch {
-        if (originAirportCode == destinationAirportCode) {
+        if (originAirport?.code == destinationAirport?.code) {
             showMessage.value = "Origin and Destination cannot be the same"
             return@launch
         }
 
         isLoading.value = true
         withContext(Dispatchers.IO) {
-            val schedules = flightSchedulesRepo.getFlightSchedules(originAirportCode, destinationAirportCode)
+            val schedules = flightSchedulesRepo.getFlightSchedules(originAirport!!.code, destinationAirport!!.code)
             isLoading.postValue(false)
             if (schedules.isNotEmpty()) {
                 flightSchedule.postValue(schedules)
@@ -53,5 +58,13 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
                 showMessage.postValue("No data found.")
             }
         }
+    }
+
+    fun setOriginAirport(code: String) {
+        originAirport = airportsByCode[airportNames[code]]!!
+    }
+
+    fun setDestinationAirport(code: String) {
+        destinationAirport = airportsByCode[airportNames[code]]!!
     }
 }
