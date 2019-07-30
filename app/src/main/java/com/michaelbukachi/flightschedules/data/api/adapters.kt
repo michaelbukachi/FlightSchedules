@@ -1,5 +1,6 @@
 package com.michaelbukachi.flightschedules.data.api
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonObject
 
@@ -55,8 +56,14 @@ fun getFlightSchedulePoint(jsonObject: JsonObject): FlightSchedulePoint {
 val scheduleDeserializer = JsonDeserializer { json, _, _ ->
     val finalList = mutableListOf<FlightSchedule>()
     val jsonObject = json.asJsonObject
-    val scheduleList = jsonObject.getAsJsonObject("ScheduleResource")
-        .getAsJsonArray("Schedule")
+    var scheduleList = JsonArray()
+    if (jsonObject.getAsJsonObject("ScheduleResource").get("Schedule").isJsonArray) {
+        scheduleList = jsonObject.getAsJsonObject("ScheduleResource")
+            .getAsJsonArray("Schedule")
+    } else {
+        scheduleList.add(jsonObject.getAsJsonObject("ScheduleResource").get("Schedule"))
+    }
+
     scheduleList.forEach {
         val scheduleObject = it.asJsonObject
         val duration = scheduleObject.getAsJsonObject("TotalJourney").get("Duration").asString

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/selectionFragment"
-        android:name="com.michaelbukachi.flightschedules.ui.SelectionFragment"
+        android:name="com.michaelbukachi.flightschedules.ui.selection.SelectionFragment"
         android:label="fragment_selection"
         tools:layout="@layout/fragment_selection">
         <action

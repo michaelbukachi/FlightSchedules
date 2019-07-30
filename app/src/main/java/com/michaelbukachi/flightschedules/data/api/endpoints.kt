@@ -11,7 +11,7 @@ interface LuftService {
     suspend fun getAccessToken(@FieldMap payload: Map<String, String>): TokenResponse
 
     @Headers("Accept: application/json")
-    @GET("mds-references/airports/?lang=EN")
+    @GET("mds-references/airports/?lang=EN&limit=100&LHoperated=true")
     suspend fun getAirports(): AirportResponse
 
     @Headers("Accept: application/json")

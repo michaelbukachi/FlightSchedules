@@ -3,8 +3,9 @@ package com.michaelbukachi.flightschedules.data
 import com.chibatching.kotpref.KotprefModel
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 
-const val DATE_FORMAT = "dd MM YYYY HH:mm:ss"
+const val DATE_FORMAT = "dd MM yyyy HH:mm:ss"
 
 object Auth : KotprefModel() {
     var accessToken by stringPref("")
@@ -18,7 +19,8 @@ object Auth : KotprefModel() {
             return true
         }
         val now = LocalDateTime.now()
-        val expiry = LocalDateTime.from(formatter.parse(expiresAt))
+        Timber.i("Expiry is $expiresAt")
+        val expiry = LocalDateTime.parse(expiresAt, formatter)
         return now > expiry
     }
 }
