@@ -19,6 +19,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField('String', 'LUFTHANSA_KEY', LUFTHANSA_KEY)
         buildConfigField('String', 'LUTFHANSA_SECRET', LUTFHANSA_SECRET)
+        resValue ("string", "GOOGLE_MAP_KEY", GOOGLE_MAP_KEY)
     }
     buildTypes {
         debug {
