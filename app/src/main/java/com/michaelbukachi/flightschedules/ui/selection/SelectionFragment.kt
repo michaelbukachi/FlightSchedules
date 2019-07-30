@@ -72,7 +72,9 @@ class SelectionFragment : Fragment() {
 
         viewModel.airportsFetched.observe(this, Observer {
             origin.setItems(it)
+            origin.selectedIndex = 0
             destination.setItems(it)
+            destination.selectedIndex = 0
         })
 
         viewModel.flightSchedule.observe(this, Observer {

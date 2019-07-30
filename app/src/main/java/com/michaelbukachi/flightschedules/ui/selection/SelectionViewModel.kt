@@ -31,7 +31,6 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
             originAirport = airports[0]
             destinationAirport = airports[0]
             airportsFetched.postValue(airports.map {
-                println("sdfsdfsdfsdfsdfs")
                 val string = "${it.name} (${it.code})"
                 airportsByCode[it.code] = it
                 airportNames[string] = it.code
