@@ -1,10 +1,15 @@
 package com.michaelbukachi.flightschedules.data
 
-import okhttp3.Interceptor
+import com.michaelbukachi.flightschedules.BuildConfig
+import com.michaelbukachi.flightschedules.data.api.ApiService
+import kotlinx.coroutines.runBlocking
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.Protocol
-import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import org.threeten.bp.LocalDateTime
+import retrofit2.HttpException
 import timber.log.Timber
 import java.net.SocketTimeoutException
 
@@ -27,6 +32,43 @@ class AuthInterceptor : Interceptor {
 
         return chain.proceed(newRequest)
     }
+}
+
+class TokenAuthenticator : Authenticator, KoinComponent {
+    private val apiService: ApiService by inject()
+
+    override fun authenticate(route: Route?, response: Response): Request? {
+        if (response.code == 401) {
+            val token = getNewToken()
+            return response.request.newBuilder().header("Authorization", token).build()
+        }
+
+        return null
+    }
+
+    private fun getNewToken(): String = runBlocking {
+        val payload = mutableMapOf(
+            "client_id" to BuildConfig.LUFTHANSA_KEY,
+            "client_secret" to BuildConfig.LUTFHANSA_SECRET,
+            "grant_type" to "client_credentials"
+        )
+        try {
+            Timber.i("Fetching new access token")
+            val luftService = apiService.luftService
+            val response = luftService.getAccessToken(payload)
+            var now = LocalDateTime.now()
+            now = now.plusSeconds(response.expiresIn.toLong())
+            Auth.accessToken = response.accessToken
+            Auth.tokenType = response.tokenType
+            Auth.expiresAt = now.format(Auth.formatter)
+            return@runBlocking "${response.tokenType.capitalize()} ${response.accessToken}"
+        } catch (e: HttpException) {
+            Timber.e("Unable to fetch token")
+            Timber.e(e)
+            return@runBlocking ""
+        }
+    }
+
 }
 
 class TimeoutInterceptor : Interceptor {

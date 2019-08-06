@@ -1,6 +1,5 @@
 package com.michaelbukachi.flightschedules.data.repos
 
-import android.content.Context
 import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.Auth
 import com.michaelbukachi.flightschedules.data.api.Airport
@@ -12,7 +11,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.HttpException
 import timber.log.Timber
 
-class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Context) : FlightSchedulesRepo {
+class FlightSchedulesRepoImpl(apiService: ApiService) : FlightSchedulesRepo {
 
 
     private val luftService = apiService.luftService
@@ -36,10 +35,6 @@ class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Conte
     }
 
     override suspend fun getAirports(): List<Airport> {
-        if (Auth.hasExpired()) {
-            refreshToken()
-        }
-
         return try {
             luftService.getAirports().airports
         } catch (e: HttpException) {
@@ -49,9 +44,6 @@ class FlightSchedulesRepoImpl(apiService: ApiService, private val context: Conte
     }
 
     override suspend fun getFlightSchedules(origin: String, destination: String): List<FlightSchedule> {
-        if (Auth.hasExpired()) {
-            refreshToken()
-        }
 
         val tomorrow = LocalDate.now().plusDays(1)
         val formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd")
