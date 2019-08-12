@@ -20,10 +20,7 @@
         android:label="Flight Path"
         tools:layout="@layout/fragment_map">
         <argument
-            android:name="origin"
-            app:argType="com.michaelbukachi.flightschedules.data.api.Airport" />
-        <argument
-            android:name="destination"
-            app:argType="com.michaelbukachi.flightschedules.data.api.Airport" />
+            android:name="route"
+            app:argType="com.michaelbukachi.flightschedules.ui.selection.Route" />
     </fragment>
 </navigation>

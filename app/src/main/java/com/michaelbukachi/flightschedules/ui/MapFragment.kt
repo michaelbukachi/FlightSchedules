@@ -35,35 +35,46 @@ class MapFragment : Fragment() {
     private val onMapReadyCallback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val origin = LatLng(args.origin.latitude.toDouble(), args.origin.longitude.toDouble())
-        val destination = LatLng(args.destination.latitude.toDouble(), args.destination.longitude.toDouble())
-        val originMarker = mMap.addMarker(
-            MarkerOptions()
-                .position(origin)
-                .title("${args.origin.name} (${args.origin.code})")
-                .draggable(false)
-        )
-        val destinationMarker = mMap.addMarker(
-            MarkerOptions()
-                .position(destination)
-                .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-                .title("${args.destination.name} (${args.destination.code})")
-                .draggable(false)
-        )
+        var origin: LatLng? = null
+        var destination: LatLng? = null
+        val lastIndex = args.route.airports.lastIndex
+        var lines = PolylineOptions()
+
+        for (i in args.route.airports.indices) {
+            val airport = args.route.airports[i]
+            val coord = LatLng(airport.latitude.toDouble(), airport.longitude.toDouble())
+            if (i == 0) {
+                origin = coord
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(coord)
+                        .title("${airport.name} (${airport.code})")
+                        .draggable(false)
+                )
+            }
+
+            if (i == lastIndex) {
+                destination = coord
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(coord)
+                        .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                        .title("${airport.name} (${airport.code})")
+                        .draggable(false)
+                )
+            }
+
+            lines = lines.add(coord)
+        }
         mMap.addPolyline(
-            PolylineOptions()
-                .add(origin)
-                .add(destination)
-                .width(8f).color(Color.RED)
+            lines.width(8f).color(Color.RED)
         )
-        val bounds = LatLngBounds.Builder().include(origin).include(destination).build()
+        val bounds = LatLngBounds.Builder().include(origin!!).include(destination!!).build()
         val width = resources.displayMetrics.widthPixels
         val height = resources.displayMetrics.heightPixels
         val padding = (width * 0.10).toInt()
         val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
         mMap.animateCamera(cu)
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     override fun onCreateView(

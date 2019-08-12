@@ -34,8 +34,12 @@ class SelectionFragment : Fragment() {
             override fun onClick(schedule: FlightSchedule) {
                 findNavController().navigate(
                     SelectionFragmentDirections.actionSelectionFragmentToMapFragment(
-                        viewModel.originAirport!!,
-                        viewModel.destinationAirport!!
+                        Route(
+                            listOf(
+                                viewModel.originAirport!!,
+                                viewModel.destinationAirport!!
+                            )
+                        )
                     )
                 )
             }
