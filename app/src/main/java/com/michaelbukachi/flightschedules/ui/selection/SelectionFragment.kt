@@ -11,14 +11,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.michaelbukachi.flightschedules.R
+import com.michaelbukachi.flightschedules.data.api.Airport
 import com.michaelbukachi.flightschedules.data.api.FlightSchedule
 import kotlinx.android.synthetic.main.fragment_selection.*
-import org.koin.android.ext.android.inject
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 
 class SelectionFragment : Fragment() {
 
-    private val viewModel: SelectionViewModel by inject()
+    private val viewModel: SelectionViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,29 +35,56 @@ class SelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val listener = object : OnClickListener {
             override fun onClick(schedule: FlightSchedule) {
-                findNavController().navigate(
-                    SelectionFragmentDirections.actionSelectionFragmentToMapFragment(
-                        Route(
-                            listOf(
-                                viewModel.originAirport!!,
-                                viewModel.destinationAirport!!
+                if (schedule.isDirect) {
+                    Timber.i("Is a direct flight")
+                    findNavController().navigate(
+                        SelectionFragmentDirections.actionSelectionFragmentToMapFragment(
+                            Route(
+                                listOf(
+                                    viewModel.originAirport!!,
+                                    viewModel.destinationAirport!!
+                                )
                             )
                         )
                     )
-                )
+                } else {
+                    Timber.i("Not a direct flight")
+                    lifecycleScope.launch {
+                        val airports = mutableListOf<Airport>()
+                        airports.add(viewModel.originAirport!!)
+                        progressBar.visibility = View.VISIBLE
+                        for (i in 1 until schedule.points.lastIndex - 1) {
+                            val fs = schedule.points[i]
+                            val airport = viewModel.getAirport(fs.departureAirport)
+                            airport?.let {
+                                airports.add(it)
+                            }
+                        }
+                        progressBar.visibility = View.GONE
+                        airports.add(viewModel.destinationAirport!!)
+                        findNavController().navigate(
+                            SelectionFragmentDirections.actionSelectionFragmentToMapFragment(
+                                Route(airports)
+                            )
+                        )
+                    }
+                }
             }
         }
+
         val adapter = FlightSchedulesAdapter(emptyList(), listener)
-        origin.setOnItemSelectedListener { _, _, _, item ->
+        origin.setOnItemSelectedListener { _, pos, _, item ->
             val selection = item as String
+            viewModel.originIndex = pos
             if (viewModel.getOriginAirportCode() == null || !selection.contains(viewModel.getOriginAirportCode()!!)) {
                 viewModel.setOriginAirport(selection)
                 viewModel.fetchSchedules()
             }
 
         }
-        destination.setOnItemSelectedListener { _, _, _, item ->
+        destination.setOnItemSelectedListener { _, pos, _, item ->
             val selection = item as String
+            viewModel.destinationIndex = pos
             if (viewModel.getDestinationAirportCode() == null || !selection.contains(viewModel.getDestinationAirportCode()!!)) {
                 viewModel.setDestinationAirport(selection)
                 viewModel.fetchSchedules()
@@ -76,9 +106,9 @@ class SelectionFragment : Fragment() {
 
         viewModel.airportsFetched.observe(this, Observer {
             origin.setItems(it)
-            origin.selectedIndex = 0
+            origin.selectedIndex = viewModel.originIndex
             destination.setItems(it)
-            destination.selectedIndex = 0
+            destination.selectedIndex = viewModel.destinationIndex
         })
 
         viewModel.flightSchedule.observe(this, Observer {
@@ -91,9 +121,12 @@ class SelectionFragment : Fragment() {
         })
 
         lifecycleScope.launchWhenCreated {
-            viewModel.isLoading.value = true
-            viewModel.fetchAirports()
-            viewModel.isLoading.value = false
+            if (!viewModel.airportsFetched()) {
+                viewModel.isLoading.value = true
+                viewModel.fetchAirports()
+                viewModel.isLoading.value = false
+            }
+
         }
     }
 

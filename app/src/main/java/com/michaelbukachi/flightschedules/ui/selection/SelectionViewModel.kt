@@ -10,6 +10,7 @@ import com.michaelbukachi.flightschedules.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) : ViewModel() {
 
@@ -23,6 +24,8 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
     private val airportNames = mutableMapOf<String, String>()
     var originAirport: Airport? = null
     var destinationAirport: Airport? = null
+    var originIndex = 0
+    var destinationIndex = 0
 
 
     suspend fun fetchAirports() = withContext(Dispatchers.IO) {
@@ -62,6 +65,11 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
         }
     }
 
+    suspend fun getAirport(code: String): Airport? = withContext(Dispatchers.IO) {
+        Timber.i("Getting airport details for $code")
+        return@withContext flightSchedulesRepo.getAirport(code)
+    }
+
     fun getOriginAirportCode(): String? = originAirport?.code
 
     fun getDestinationAirportCode(): String? = originAirport?.code
@@ -73,4 +81,6 @@ class SelectionViewModel(private val flightSchedulesRepo: FlightSchedulesRepo) :
     fun setDestinationAirport(code: String) {
         destinationAirport = airportsByCode[airportNames[code]]!!
     }
+
+    fun airportsFetched() = !airportNames.isEmpty()
 }
