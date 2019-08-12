@@ -53,7 +53,8 @@ class SelectionFragment : Fragment() {
                         val airports = mutableListOf<Airport>()
                         airports.add(viewModel.originAirport!!)
                         progressBar.visibility = View.VISIBLE
-                        for (i in 1 until schedule.points.lastIndex - 1) {
+
+                        for (i in 1 until schedule.points.size) {
                             val fs = schedule.points[i]
                             val airport = viewModel.getAirport(fs.departureAirport)
                             airport?.let {

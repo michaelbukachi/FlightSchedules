@@ -40,6 +40,8 @@ class MapFragment : Fragment() {
         val lastIndex = args.route.airports.lastIndex
         var lines = PolylineOptions()
 
+        var bounds = LatLngBounds.Builder()
+
         for (i in args.route.airports.indices) {
             val airport = args.route.airports[i]
             val coord = LatLng(airport.latitude.toDouble(), airport.longitude.toDouble())
@@ -65,16 +67,19 @@ class MapFragment : Fragment() {
             }
 
             lines = lines.add(coord)
+            bounds = bounds.include(coord)
         }
         mMap.addPolyline(
             lines.width(8f).color(Color.RED)
         )
-        val bounds = LatLngBounds.Builder().include(origin!!).include(destination!!).build()
-        val width = resources.displayMetrics.widthPixels
-        val height = resources.displayMetrics.heightPixels
-        val padding = (width * 0.10).toInt()
-        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-        mMap.animateCamera(cu)
+        mMap.setOnMapLoadedCallback {
+            val width = resources.displayMetrics.widthPixels
+            val height = resources.displayMetrics.heightPixels
+            val padding = (width * 0.10).toInt()
+            val cu = CameraUpdateFactory.newLatLngBounds(bounds.build(), padding)
+            mMap.animateCamera(cu)
+        }
+
     }
 
     override fun onCreateView(
