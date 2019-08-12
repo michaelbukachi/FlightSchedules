@@ -14,12 +14,29 @@ data class Airport(val code: String, val name: String, val latitude: Float, val 
 val airportsDeserializer = JsonDeserializer { json, _, _ ->
     val finalList = mutableListOf<Airport>()
     val jsonObject = json.asJsonObject
-    val airportsList = jsonObject.getAsJsonObject("AirportResource")
-        .getAsJsonObject("Airports")
-        .getAsJsonArray("Airport")
+    if (jsonObject.getAsJsonObject("AirportResource")
+            .getAsJsonObject("Airports").get("Airport").isJsonArray
+    ) {
+        val airportsList = jsonObject.getAsJsonObject("AirportResource")
+            .getAsJsonObject("Airports")
+            .getAsJsonArray("Airport")
 
-    airportsList.forEach {
-        val airportObject = it.asJsonObject
+        airportsList.forEach {
+            val airportObject = it.asJsonObject
+            val code = airportObject.get("AirportCode").asString
+            val coordinateObject = airportObject.getAsJsonObject("Position")
+                .getAsJsonObject("Coordinate")
+            val latitude = coordinateObject.get("Latitude").asFloat
+            val longitude = coordinateObject.get("Longitude").asFloat
+            val nameObject = airportObject.getAsJsonObject("Names")
+                .getAsJsonObject("Name")
+            val name = nameObject.get("$").asString
+            finalList.add(Airport(code, name, latitude, longitude))
+        }
+    } else {
+        val airportObject = jsonObject.getAsJsonObject("AirportResource")
+            .getAsJsonObject("Airports")
+            .getAsJsonObject("Airport")
         val code = airportObject.get("AirportCode").asString
         val coordinateObject = airportObject.getAsJsonObject("Position")
             .getAsJsonObject("Coordinate")
@@ -30,6 +47,7 @@ val airportsDeserializer = JsonDeserializer { json, _, _ ->
         val name = nameObject.get("$").asString
         finalList.add(Airport(code, name, latitude, longitude))
     }
+
 
     return@JsonDeserializer AirportResponse(finalList)
 }

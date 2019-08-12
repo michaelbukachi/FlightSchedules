@@ -43,6 +43,20 @@ class FlightSchedulesRepoImpl(apiService: ApiService) : FlightSchedulesRepo {
         }
     }
 
+    override suspend fun getAirport(code: String): Airport? {
+        return try {
+            val airports = luftService.getAirport(code).airports
+            if (airports.isNotEmpty()) {
+                airports[0]
+            } else {
+                null
+            }
+        } catch (e: HttpException) {
+            Timber.e("${e.code()} ${e.message()}")
+            null
+        }
+    }
+
     override suspend fun getFlightSchedules(origin: String, destination: String): List<FlightSchedule> {
 
         val tomorrow = LocalDate.now().plusDays(1)

@@ -9,5 +9,7 @@ interface FlightSchedulesRepo {
 
     suspend fun getAirports(): List<Airport>
 
+    suspend fun getAirport(code: String): Airport?
+
     suspend fun getFlightSchedules(origin: String, destination: String): List<FlightSchedule>
 }

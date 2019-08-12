@@ -15,6 +15,10 @@ interface LuftService {
     suspend fun getAirports(): AirportResponse
 
     @Headers("Accept: application/json")
+    @GET("mds-references/airports/{airportCode}/?lang=EN")
+    suspend fun getAirport(@Path("airportCode") code: String): AirportResponse
+
+    @Headers("Accept: application/json")
     @GET("operations/schedules/{origin}/{destination}/{fromDateTime}")
     suspend fun getFlightSchedules(
         @Path("origin") origin: String,

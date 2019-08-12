@@ -39,7 +39,13 @@ class TokenAuthenticator : Authenticator, KoinComponent {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
+            if (response.request.url.toString().contains("oauth/token")) {
+                return null
+            }
             val token = getNewToken()
+            if (token.isEmpty()) {
+                return null
+            }
             return response.request.newBuilder().header("Authorization", token).build()
         }
 
@@ -64,6 +70,7 @@ class TokenAuthenticator : Authenticator, KoinComponent {
             return@runBlocking "${response.tokenType.capitalize()} ${response.accessToken}"
         } catch (e: HttpException) {
             Timber.e("Unable to fetch token")
+            Timber.e(e.response()!!.errorBody()!!.string())
             Timber.e(e)
             return@runBlocking ""
         }

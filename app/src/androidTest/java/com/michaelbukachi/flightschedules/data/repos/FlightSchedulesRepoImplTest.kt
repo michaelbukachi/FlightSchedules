@@ -6,8 +6,7 @@ import com.michaelbukachi.flightschedules.data.Auth
 import com.michaelbukachi.flightschedules.data.clearPref
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
@@ -29,6 +28,12 @@ class FlightSchedulesRepoImplTest : KoinTest {
     fun testGetAirportsIsSuccessful() = runBlocking {
         val airports = repo.getAirports()
         assertTrue(airports.isNotEmpty())
+    }
+
+    @Test
+    fun testGetSingleAirportSuccessful() = runBlocking {
+        val airport = repo.getAirport("AAA")
+        assertNotNull(airport)
     }
 
     @Test
