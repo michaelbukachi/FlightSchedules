@@ -53,6 +53,7 @@ class TokenAuthenticator : Authenticator, KoinComponent {
     }
 
     private fun getNewToken(): String = runBlocking {
+        Auth.clear()
         val payload = mutableMapOf(
             "client_id" to BuildConfig.LUFTHANSA_KEY,
             "client_secret" to BuildConfig.LUTFHANSA_SECRET,
