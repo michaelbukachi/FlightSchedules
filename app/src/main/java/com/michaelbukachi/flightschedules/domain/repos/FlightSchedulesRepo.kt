@@ -1,7 +1,7 @@
-package com.michaelbukachi.flightschedules.data.repos
+package com.michaelbukachi.flightschedules.domain.repos
 
-import com.michaelbukachi.flightschedules.data.api.Airport
-import com.michaelbukachi.flightschedules.data.api.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.Airport
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 
 interface FlightSchedulesRepo {
 

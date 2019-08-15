@@ -2,9 +2,9 @@ package com.michaelbukachi.flightschedules.ui.selection
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.michaelbukachi.flightschedules.DependenciesRule
-import com.michaelbukachi.flightschedules.data.api.Airport
-import com.michaelbukachi.flightschedules.data.api.FlightSchedule
-import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepo
+import com.michaelbukachi.flightschedules.domain.models.Airport
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
 import com.michaelbukachi.flightschedules.observeOnce
 import com.nhaarman.mockitokotlin2.any
 import kotlinx.coroutines.ExperimentalCoroutinesApi

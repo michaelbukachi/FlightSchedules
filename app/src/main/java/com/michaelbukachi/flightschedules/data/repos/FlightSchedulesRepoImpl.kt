@@ -2,16 +2,18 @@ package com.michaelbukachi.flightschedules.data.repos
 
 import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.Auth
-import com.michaelbukachi.flightschedules.data.api.Airport
 import com.michaelbukachi.flightschedules.data.api.ApiService
-import com.michaelbukachi.flightschedules.data.api.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.Airport
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.HttpException
 import timber.log.Timber
 
-class FlightSchedulesRepoImpl(apiService: ApiService) : FlightSchedulesRepo {
+class FlightSchedulesRepoImpl(apiService: ApiService) :
+    FlightSchedulesRepo {
 
 
     private val luftService = apiService.luftService

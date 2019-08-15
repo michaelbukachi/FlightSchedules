@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import com.michaelbukachi.flightschedules.di.appModules
 import com.michaelbukachi.flightschedules.di.dataModules
+import com.michaelbukachi.flightschedules.di.domainModules
 import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,7 +31,7 @@ class DependenciesRule : TestRule {
                 }
                 val mainThreadSurrogate = newSingleThreadContext("UI thread")
                 Dispatchers.setMain(mainThreadSurrogate)
-                startKoin { modules(listOf(testContext, appModules, dataModules)) }
+                startKoin { modules(listOf(testContext, appModules, domainModules, dataModules)) }
                 base?.evaluate()
                 Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
                 mainThreadSurrogate.close()

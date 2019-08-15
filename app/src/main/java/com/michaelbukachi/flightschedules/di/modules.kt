@@ -6,8 +6,9 @@ import com.michaelbukachi.flightschedules.data.AuthInterceptor
 import com.michaelbukachi.flightschedules.data.TimeoutInterceptor
 import com.michaelbukachi.flightschedules.data.TokenAuthenticator
 import com.michaelbukachi.flightschedules.data.api.*
-import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepo
 import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepoImpl
+import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
+import com.michaelbukachi.flightschedules.domain.usecases.FlightsUseCase
 import com.michaelbukachi.flightschedules.ui.selection.SelectionViewModel
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -21,6 +22,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModules = module {
     viewModel { SelectionViewModel(get()) }
+}
+
+val domainModules = module {
+    factory { FlightsUseCase(get()) }
 }
 
 val dataModules = module {

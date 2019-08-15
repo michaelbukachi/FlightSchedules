@@ -1,15 +1,14 @@
 package com.michaelbukachi.flightschedules.data.api
 
-import android.os.Parcelable
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonObject
-import kotlinx.android.parcel.Parcelize
+import com.michaelbukachi.flightschedules.domain.models.Airport
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedulePoint
 
 data class AirportResponse(val airports: List<Airport>)
 
-@Parcelize
-data class Airport(val code: String, val name: String, val latitude: Float, val longitude: Float) : Parcelable
 
 val airportsDeserializer = JsonDeserializer { json, _, _ ->
     val finalList = mutableListOf<Airport>()
@@ -54,12 +53,6 @@ val airportsDeserializer = JsonDeserializer { json, _, _ ->
 
 data class ScheduleResponse(val schedule: List<FlightSchedule>)
 
-data class FlightSchedule(val duration: String, val points: List<FlightSchedulePoint>, val isDirect: Boolean)
-
-data class FlightSchedulePoint(
-    val departureAirport: String, val departureTime: String, val arrivalAirport: String,
-    val arrivalTime: String, val airlineId: String, val flightNo: Int
-)
 
 fun getFlightSchedulePoint(jsonObject: JsonObject): FlightSchedulePoint {
     val departureAirport = jsonObject.getAsJsonObject("Departure").get("AirportCode").asString

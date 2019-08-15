@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.michaelbukachi.flightschedules.R
-import com.michaelbukachi.flightschedules.data.api.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 import kotlinx.android.synthetic.main.schedule_list_item.view.*
 import org.threeten.bp.Duration
 import org.threeten.bp.format.DateTimeFormatter

@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.michaelbukachi.flightschedules.data.Auth
 import com.michaelbukachi.flightschedules.data.clearPref
+import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*

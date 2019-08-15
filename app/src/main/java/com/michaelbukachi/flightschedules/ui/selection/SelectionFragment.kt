@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.michaelbukachi.flightschedules.R
-import com.michaelbukachi.flightschedules.data.api.Airport
-import com.michaelbukachi.flightschedules.data.api.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.Airport
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 import kotlinx.android.synthetic.main.fragment_selection.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
