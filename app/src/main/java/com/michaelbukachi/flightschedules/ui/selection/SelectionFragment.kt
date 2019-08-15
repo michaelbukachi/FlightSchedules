@@ -53,14 +53,7 @@ class SelectionFragment : Fragment() {
                         val airports = mutableListOf<Airport>()
                         airports.add(viewModel.originAirport!!)
                         progressBar.visibility = View.VISIBLE
-
-                        for (i in 1 until schedule.points.size) {
-                            val fs = schedule.points[i]
-                            val airport = viewModel.getAirport(fs.departureAirport)
-                            airport?.let {
-                                airports.add(it)
-                            }
-                        }
+                        airports.addAll(viewModel.getAirportsFromSchedule(schedule.points))
                         progressBar.visibility = View.GONE
                         airports.add(viewModel.destinationAirport!!)
                         findNavController().navigate(
@@ -113,11 +106,7 @@ class SelectionFragment : Fragment() {
         })
 
         viewModel.flightSchedule.observe(this, Observer {
-            if (it.isEmpty()) {
-                blank.visibility = View.VISIBLE
-            } else {
-                blank.visibility = View.GONE
-            }
+            blank.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.updateData(it)
         })
 

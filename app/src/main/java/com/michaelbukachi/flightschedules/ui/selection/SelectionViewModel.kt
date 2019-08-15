@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.michaelbukachi.flightschedules.domain.models.Airport
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
+import com.michaelbukachi.flightschedules.domain.models.FlightSchedulePoint
 import com.michaelbukachi.flightschedules.domain.usecases.FlightsUseCase
 import com.michaelbukachi.flightschedules.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,6 @@ import timber.log.Timber
 class SelectionViewModel(private val flightsUseCase: FlightsUseCase) : ViewModel() {
 
     val showMessage = SingleLiveEvent<String>()
-    val reset = SingleLiveEvent<Void>()
     val isLoading = MutableLiveData<Boolean>()
     val airportsFetched = MutableLiveData<List<String>>()
     val flightSchedule = MutableLiveData<List<FlightSchedule>>()
@@ -59,6 +59,18 @@ class SelectionViewModel(private val flightsUseCase: FlightsUseCase) : ViewModel
     suspend fun getAirport(code: String): Airport? = withContext(Dispatchers.IO) {
         Timber.i("Getting airport details for $code")
         return@withContext flightsUseCase.getAirportDetails(code)
+    }
+
+    suspend fun getAirportsFromSchedule(points: List<FlightSchedulePoint>): List<Airport> {
+        val airports = mutableListOf<Airport>()
+        for (i in 1 until points.size) {
+            val fs = points[i]
+            val airport = getAirport(fs.departureAirport)
+            airport?.let {
+                airports.add(it)
+            }
+        }
+        return airports
     }
 
     fun getOriginAirportCode(): String? = originAirport?.code
