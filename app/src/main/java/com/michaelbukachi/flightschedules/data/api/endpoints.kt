@@ -3,6 +3,7 @@ package com.michaelbukachi.flightschedules.data.api
 import com.michaelbukachi.flightschedules.data.api.response.TokenResponse
 import retrofit2.Retrofit
 import retrofit2.http.*
+import javax.inject.Inject
 
 interface LuftService {
 
@@ -28,7 +29,7 @@ interface LuftService {
 }
 
 
-class ApiService(retrofit: Retrofit) {
+class ApiService @Inject constructor(retrofit: Retrofit) {
 
     val luftService = retrofit.create(LuftService::class.java)
 }

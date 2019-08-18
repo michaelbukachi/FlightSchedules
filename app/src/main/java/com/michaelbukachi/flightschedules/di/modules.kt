@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.AuthInterceptor
 import com.michaelbukachi.flightschedules.data.TimeoutInterceptor
-import com.michaelbukachi.flightschedules.data.TokenAuthenticator
 import com.michaelbukachi.flightschedules.data.api.*
 import com.michaelbukachi.flightschedules.data.repos.FlightSchedulesRepoImpl
 import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
@@ -37,7 +36,7 @@ val dataModules = module {
         OkHttpClient.Builder()
             .addNetworkInterceptor(TimeoutInterceptor())
             .addNetworkInterceptor(AuthInterceptor())
-            .authenticator(TokenAuthenticator())
+//            .authenticator(TokenAuthenticator())
             .addInterceptor(httpInterceptor)
             .build()
     }

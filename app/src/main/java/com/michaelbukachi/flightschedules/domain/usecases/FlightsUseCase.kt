@@ -3,8 +3,9 @@ package com.michaelbukachi.flightschedules.domain.usecases
 import com.michaelbukachi.flightschedules.domain.models.Airport
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
+import javax.inject.Inject
 
-class FlightsUseCase(val flightSchedulesRepo: FlightSchedulesRepo) {
+class FlightsUseCase @Inject constructor(private val flightSchedulesRepo: FlightSchedulesRepo) {
     private var airportsByCode = mutableMapOf<String, Airport>()
     private var fetchedAirports = emptyList<Airport>()
     suspend fun getAirports(): List<String> {

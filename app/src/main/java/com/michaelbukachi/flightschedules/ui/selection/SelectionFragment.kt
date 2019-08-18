@@ -7,21 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.michaelbukachi.flightschedules.R
+import com.michaelbukachi.flightschedules.di.injector
 import com.michaelbukachi.flightschedules.domain.models.Airport
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 import kotlinx.android.synthetic.main.fragment_selection.*
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 
 class SelectionFragment : Fragment() {
 
-    private val viewModel: SelectionViewModel by sharedViewModel()
+    private val viewModel by lazy {
+        ViewModelProviders.of(activity!!, activity!!.injector.selectionViewModelFactory())
+            .get(SelectionViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

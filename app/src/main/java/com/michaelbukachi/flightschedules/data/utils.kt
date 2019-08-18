@@ -2,16 +2,16 @@ package com.michaelbukachi.flightschedules.data
 
 import com.michaelbukachi.flightschedules.BuildConfig
 import com.michaelbukachi.flightschedules.data.api.ApiService
+import dagger.Lazy
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
 
 class AuthInterceptor : Interceptor {
@@ -34,8 +34,9 @@ class AuthInterceptor : Interceptor {
     }
 }
 
-class TokenAuthenticator : Authenticator, KoinComponent {
-    private val apiService: ApiService by inject()
+class TokenAuthenticator @Inject constructor(private val apiService: Lazy<ApiService>) : Authenticator {
+
+//    private lateinit var apiService: ApiService
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
@@ -61,7 +62,7 @@ class TokenAuthenticator : Authenticator, KoinComponent {
         )
         try {
             Timber.i("Fetching new access token")
-            val luftService = apiService.luftService
+            val luftService = apiService.get().luftService
             val response = luftService.getAccessToken(payload)
             var now = LocalDateTime.now()
             now = now.plusSeconds(response.expiresIn.toLong())

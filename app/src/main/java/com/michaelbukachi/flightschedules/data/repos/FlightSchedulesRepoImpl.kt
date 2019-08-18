@@ -11,8 +11,9 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
-class FlightSchedulesRepoImpl(apiService: ApiService) :
+class FlightSchedulesRepoImpl @Inject constructor(apiService: ApiService) :
     FlightSchedulesRepo {
 
 

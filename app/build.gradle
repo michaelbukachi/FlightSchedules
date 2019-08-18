@@ -46,6 +46,7 @@ dependencies {
     def koin_version = '2.0.1'
     def kotpref_version = '2.8.0'
     def lifecycle_version = '2.2.0-alpha02'
+    def dagger_version = '2.24'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -81,6 +82,9 @@ dependencies {
     // DI
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
 
     // logging
     implementation 'com.jakewharton.timber:timber:4.7.1'

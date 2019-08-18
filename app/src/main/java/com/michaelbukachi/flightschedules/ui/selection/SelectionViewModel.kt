@@ -12,8 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
 
-class SelectionViewModel(private val flightsUseCase: FlightsUseCase) : ViewModel() {
+class SelectionViewModel @Inject constructor(private val flightsUseCase: FlightsUseCase) : ViewModel() {
 
     val showMessage = SingleLiveEvent<String>()
     val isLoading = MutableLiveData<Boolean>()
