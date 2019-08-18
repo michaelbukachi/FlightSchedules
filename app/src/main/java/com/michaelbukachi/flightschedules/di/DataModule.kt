@@ -31,13 +31,6 @@ object DataModule {
         return BuildConfig.API_BASE_URL.toHttpUrl()
     }
 
-//    @JvmStatic
-//    @Singleton
-//    @Provides
-//    fun provideTokenAuthenticator(): TokenAuthenticator {
-//        return TokenAuthenticator()
-//    }
-
     @JvmStatic
     @Singleton
     @Provides

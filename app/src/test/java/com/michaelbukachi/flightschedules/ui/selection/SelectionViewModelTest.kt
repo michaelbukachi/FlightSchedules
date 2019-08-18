@@ -1,38 +1,39 @@
 package com.michaelbukachi.flightschedules.ui.selection
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.michaelbukachi.flightschedules.DependenciesRule
 import com.michaelbukachi.flightschedules.domain.models.Airport
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
-import com.michaelbukachi.flightschedules.domain.repos.FlightSchedulesRepo
+import com.michaelbukachi.flightschedules.domain.usecases.FlightsUseCase
 import com.michaelbukachi.flightschedules.observeOnce
 import com.nhaarman.mockitokotlin2.any
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.test.KoinTest
-import org.koin.test.inject
-import org.koin.test.mock.declareMock
+import org.mockito.InjectMocks
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 
-@ObsoleteCoroutinesApi
-@ExperimentalCoroutinesApi
-class SelectionViewModelTest : KoinTest {
+
+class SelectionViewModelTest {
     @get:Rule
     val rule = InstantTaskExecutorRule()
-    @get:Rule
-    val dependenciesRule = DependenciesRule()
 
-    private val flightSchedulesRepo: FlightSchedulesRepo by inject()
-    private val selectionViewModel: SelectionViewModel by inject()
+    @Mock
+    lateinit var flightsUseCase: FlightsUseCase
+    @InjectMocks
+    lateinit var selectionViewModel: SelectionViewModel
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.initMocks(this)
+    }
 
     @Test
     fun `test empty data message is shown when no airports found`() = runBlocking {
-        declareMock<FlightSchedulesRepo>()
-        `when`(flightSchedulesRepo.getAirports()).thenReturn(emptyList())
+        `when`(flightsUseCase.getAirports()).thenReturn(emptyList())
         selectionViewModel.fetchAirports()
         selectionViewModel.showMessage.observeOnce {
             assertEquals("No data found.", it)
@@ -41,17 +42,15 @@ class SelectionViewModelTest : KoinTest {
 
     @Test
     fun `test fields are update when airports are returned`() = runBlocking {
-        val airports = listOf<Airport>(
-            Airport("AAA", "Test", 1.2f, 3.4f)
-        )
-        declareMock<FlightSchedulesRepo>()
-        `when`(flightSchedulesRepo.getAirports()).thenReturn(airports)
+        val airport = Airport("AAA", "Test", 1.2f, 3.4f)
+        `when`(flightsUseCase.getAirports()).thenReturn(listOf("Test (AAA)"))
+        `when`(flightsUseCase.getDefaultAirport()).thenReturn(airport)
         selectionViewModel.fetchAirports()
         selectionViewModel.airportsFetched.observeOnce {
             assertEquals(listOf("Test (AAA)"), it)
         }
-        assertEquals(selectionViewModel.originAirport, airports[0])
-        assertEquals(selectionViewModel.destinationAirport, airports[0])
+        assertEquals(selectionViewModel.originAirport, airport)
+        assertEquals(selectionViewModel.destinationAirport, airport)
 
     }
 
@@ -65,8 +64,7 @@ class SelectionViewModelTest : KoinTest {
 
     @Test
     fun `test empty data message is shown when no flight schedules are found`() = runBlocking {
-        declareMock<FlightSchedulesRepo>()
-        `when`(flightSchedulesRepo.getFlightSchedules(any(), any())).thenReturn(emptyList())
+        `when`(flightsUseCase.getFlightSchedules(any(), any())).thenReturn(emptyList())
         selectionViewModel.originAirport = Airport("AAA", "Test", 1.2f, 3.4f)
         selectionViewModel.destinationAirport = Airport("BBB", "Test", 1.2f, 3.4f)
         selectionViewModel.fetchSchedules()
@@ -80,8 +78,7 @@ class SelectionViewModelTest : KoinTest {
         val schedules = listOf(
             FlightSchedule("PT1H30M", emptyList(), true)
         )
-        declareMock<FlightSchedulesRepo>()
-        `when`(flightSchedulesRepo.getFlightSchedules(any(), any())).thenReturn(schedules)
+        `when`(flightsUseCase.getFlightSchedules(any(), any())).thenReturn(schedules)
         selectionViewModel.originAirport = Airport("AAA", "Test", 1.2f, 3.4f)
         selectionViewModel.destinationAirport = Airport("BBB", "Test", 1.2f, 3.4f)
         selectionViewModel.fetchSchedules()

@@ -18,12 +18,6 @@ class FlightSchedules : Application(), DaggerComponentProvider {
     override fun onCreate() {
         super.onCreate()
 
-//        startKoin {
-//            if (BuildConfig.DEBUG) androidLogger() else EmptyLogger()
-//            androidContext(this@FlightSchedules)
-//            modules(listOf(appModules, domainModules, dataModules))
-//        }
-
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {

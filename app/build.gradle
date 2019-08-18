@@ -80,8 +80,6 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // DI
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
@@ -97,7 +95,6 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.koin:koin-test:$koin_version"
     testImplementation "androidx.arch.core:core-testing:2.0.1"
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'androidx.test:rules:1.2.0'
@@ -109,7 +106,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation "org.koin:koin-test:$koin_version"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
 
 }
