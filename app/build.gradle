@@ -16,7 +16,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.michaelbukachi.flightschedules.TestInstrumentationRunner"
         buildConfigField('String', 'LUFTHANSA_KEY', LUFTHANSA_KEY)
         buildConfigField('String', 'LUTFHANSA_SECRET', LUTFHANSA_SECRET)
         resValue ("string", "GOOGLE_MAP_KEY", GOOGLE_MAP_KEY)
@@ -82,6 +82,7 @@ dependencies {
     // DI
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 
 
     // logging
@@ -100,6 +101,10 @@ dependencies {
     testImplementation 'androidx.test:rules:1.2.0'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    debugImplementation ('androidx.fragment:fragment-testing:1.1.0-rc03') {
+        exclude group: 'androidx.test', module: 'core'
+    }
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'

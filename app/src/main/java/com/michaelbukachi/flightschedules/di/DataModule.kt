@@ -27,13 +27,6 @@ object DataModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideBaseUrl(): HttpUrl {
-        return BuildConfig.API_BASE_URL.toHttpUrl()
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
     fun provideOkHttpClient(authenticator: TokenAuthenticator): OkHttpClient {
         val httpInterceptor: Interceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE

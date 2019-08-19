@@ -8,7 +8,7 @@ import com.michaelbukachi.flightschedules.di.DaggerComponentProvider
 import com.michaelbukachi.flightschedules.utils.CrashReportingTree
 import timber.log.Timber
 
-class FlightSchedules : Application(), DaggerComponentProvider {
+open class FlightSchedules : Application(), DaggerComponentProvider {
 
     override val component: ApplicationComponent by lazy {
         DaggerApplicationComponent.builder()
