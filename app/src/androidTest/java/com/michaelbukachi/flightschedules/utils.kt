@@ -5,10 +5,7 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 
 fun MockWebServer.res(code: Int, body: String) {
-    enqueue(MockResponse().apply {
-        setResponseCode(code)
-        setBody(body)
-    })
+    enqueue(MockResponse().setResponseCode(code).setBody(body))
 }
 
 fun MockWebServer.timeout() {

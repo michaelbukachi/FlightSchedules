@@ -74,19 +74,14 @@ class SelectionFragment : Fragment() {
         origin.setOnItemSelectedListener { _, pos, _, item ->
             val selection = item as String
             viewModel.originIndex = pos
-            if (viewModel.getOriginAirportCode() == null || !selection.contains(viewModel.getOriginAirportCode()!!)) {
-                viewModel.setOriginAirport(selection)
-                viewModel.fetchSchedules()
-            }
-
+            viewModel.setOriginAirport(selection)
+            viewModel.fetchSchedules()
         }
         destination.setOnItemSelectedListener { _, pos, _, item ->
             val selection = item as String
             viewModel.destinationIndex = pos
-            if (viewModel.getDestinationAirportCode() == null || !selection.contains(viewModel.getDestinationAirportCode()!!)) {
-                viewModel.setDestinationAirport(selection)
-                viewModel.fetchSchedules()
-            }
+            viewModel.setDestinationAirport(selection)
+            viewModel.fetchSchedules()
         }
 
         schedulesList.setHasFixedSize(true)
@@ -113,8 +108,7 @@ class SelectionFragment : Fragment() {
             blank.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.updateData(it)
         })
-
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             if (!viewModel.airportsFetched()) {
                 viewModel.isLoading.value = true
                 viewModel.fetchAirports()

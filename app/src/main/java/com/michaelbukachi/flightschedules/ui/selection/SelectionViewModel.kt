@@ -41,6 +41,7 @@ class SelectionViewModel @Inject constructor(private val flightsUseCase: Flights
     fun fetchSchedules() = viewModelScope.launch {
         if (originAirport?.code == destinationAirport?.code) {
             showMessage.value = "Origin and Destination cannot be the same"
+            flightSchedule.postValue(emptyList())
             return@launch
         }
 
