@@ -7,50 +7,38 @@
     android:layout_height="match_parent"
     tools:context=".ui.selection.SelectionFragment">
 
-    <TextView
-        android:id="@+id/originLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/origin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <com.jaredrummler.materialspinner.MaterialSpinner
+    <com.tiper.MaterialSpinner
         android:id="@+id/origin"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:hint="@string/origin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/originLbl"
-        app:ms_background_color="@color/colorPrimaryLight" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:spinnerMode="dialog"
+        app:strokeColor="@color/colorPrimary"
+        tools:text="Origin" />
 
-    <TextView
-        android:id="@+id/destinationLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/destination"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/origin" />
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
+    <com.tiper.MaterialSpinner
         android:id="@+id/destination"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:hint="@string/destination"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/destinationLbl"
-        app:ms_background_color="@color/colorPrimaryLight" />
+        app:layout_constraintTop_toBottomOf="@id/origin"
+        app:spinnerMode="dialog"
+        app:strokeColor="@color/colorPrimary"
+        tools:text="Destination" />
 
 
     <View

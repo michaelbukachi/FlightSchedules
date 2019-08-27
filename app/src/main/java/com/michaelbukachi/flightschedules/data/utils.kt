@@ -11,6 +11,7 @@ import org.threeten.bp.LocalDateTime
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 
@@ -84,19 +85,25 @@ class TimeoutInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         return try {
             chain.proceed(chain.request())
-        } catch (e: SocketTimeoutException) {
-            Timber.e(e)
+        } catch (e: Exception) {
+            when (e) {
+                is SocketTimeoutException, is UnknownHostException -> {
+                    Timber.e(e)
 
-            val body = "{\"status\": \"error\", \"message\": \"Timeout has occurred\"}"
-                .toResponseBody("application/json".toMediaType())
+                    val body = "{\"status\": \"error\", \"message\": \"Timeout has occurred\"}"
+                        .toResponseBody("application/json".toMediaType())
 
-            Response.Builder()
-                .request(chain.request())
-                .protocol(Protocol.HTTP_1_1)
-                .code(500)
-                .body(body)
-                .message("Unable to connect")
-                .build()
+                    Response.Builder()
+                        .request(chain.request())
+                        .protocol(Protocol.HTTP_1_1)
+                        .code(500)
+                        .body(body)
+                        .message("Unable to connect")
+                        .build()
+                }
+                else -> throw e
+            }
+
         }
     }
 

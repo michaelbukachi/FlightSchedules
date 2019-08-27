@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,7 @@ import com.michaelbukachi.flightschedules.R
 import com.michaelbukachi.flightschedules.di.injector
 import com.michaelbukachi.flightschedules.domain.models.Airport
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
+import com.tiper.MaterialSpinner
 import kotlinx.android.synthetic.main.fragment_selection.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -71,17 +73,41 @@ class SelectionFragment : Fragment() {
         }
 
         val adapter = FlightSchedulesAdapter(emptyList(), listener)
-        origin.setOnItemSelectedListener { _, pos, _, item ->
-            val selection = item as String
-            viewModel.originIndex = pos
-            viewModel.setOriginAirport(selection)
-            viewModel.fetchSchedules()
+        origin.onItemSelectedListener = object : MaterialSpinner.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: MaterialSpinner,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selection = parent.selectedItem as String
+                viewModel.originIndex = position
+                viewModel.setOriginAirport(selection)
+                viewModel.fetchSchedules()
+            }
+
+            override fun onNothingSelected(parent: MaterialSpinner) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
         }
-        destination.setOnItemSelectedListener { _, pos, _, item ->
-            val selection = item as String
-            viewModel.destinationIndex = pos
-            viewModel.setDestinationAirport(selection)
-            viewModel.fetchSchedules()
+        destination.onItemSelectedListener = object : MaterialSpinner.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: MaterialSpinner,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selection = parent.selectedItem as String
+                viewModel.destinationIndex = position
+                viewModel.setDestinationAirport(selection)
+                viewModel.fetchSchedules()
+            }
+
+            override fun onNothingSelected(parent: MaterialSpinner) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
         }
 
         schedulesList.setHasFixedSize(true)
@@ -98,10 +124,18 @@ class SelectionFragment : Fragment() {
         })
 
         viewModel.airportsFetched.observe(this, Observer {
-            origin.setItems(it)
-            origin.selectedIndex = viewModel.originIndex
-            destination.setItems(it)
-            destination.selectedIndex = viewModel.destinationIndex
+            val originAdapter =
+                ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, it).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+            val destinationAdapter =
+                ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, it).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+            origin.adapter = originAdapter
+            destination.adapter = destinationAdapter
+            origin.selection = viewModel.originIndex
+            destination.selection = viewModel.destinationIndex
         })
 
         viewModel.flightSchedule.observe(this, Observer {
