@@ -15,5 +15,5 @@ fun MockWebServer.timeout() {
 }
 
 fun readFile(fileName: String): String {
-    return FlightSchedulesActivityTest::class.java.getResource(fileName)?.readText() ?: ""
+    return SelectionFragmentTest::class.java.getResource(fileName)?.readText() ?: ""
 }
