@@ -48,10 +48,11 @@ android {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.50")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1")
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.core:core-ktx:1.0.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.appcompat:appcompat-resources:1.1.0")
+    implementation("androidx.core:core-ktx:1.1.0")
     implementation("com.google.android.gms:play-services-maps:17.0.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("androidx.recyclerview:recyclerview:1.1.0-beta01")
@@ -59,8 +60,8 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.0.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.0.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.1.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.1.0")
 
     // Lifecycle + Viewmodel
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02")
@@ -87,18 +88,18 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1")
 
     // Shared preferences
-    implementation("com.chibatching.kotpref:kotpref:2.8.0")
-    implementation("com.chibatching.kotpref:initializer:2.8.0")
+    implementation("com.chibatching.kotpref:kotpref:2.9.1")
+    implementation("com.chibatching.kotpref:initializer:2.9.1")
 
     // date/time
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
 
     testImplementation("junit:junit:4.12")
-    testImplementation("androidx.arch.core:core-testing:2.0.1")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation("androidx.test.ext:junit:1.1.1")
     testImplementation("androidx.test:rules:1.2.0")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.1")
 
     debugImplementation("androidx.fragment:fragment-testing:1.1.0-rc03") {
         exclude(mapOf("group" to "androidx.test", "module" to "core"))
