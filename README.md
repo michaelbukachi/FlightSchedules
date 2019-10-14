@@ -1,4 +1,6 @@
 # Flight Schedule
+[![Build Status](https://travis-ci.org/michaelbukachi/FlightSchedules.svg?branch=master)](https://travis-ci.org/michaelbukachi/FlightSchedules)
+
 This is a simple app to display flight schedules on google maps.
 
 ![image1](images/image1.png)
