@@ -10,6 +10,7 @@ before_install:
     -in gradle-local.properties.enc -out gradle-local.properties -d
   - sudo apt-get --quiet update --yes
   - sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+  - echo "org.gradle.daemon=false" >> gradle.properties
 
 before_script:
   - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
