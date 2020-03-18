@@ -4,6 +4,8 @@ services:
   - docker
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_9c48a5b54587_key -iv $encrypted_9c48a5b54587_iv
+    -in gradle-local.properties.enc -out gradle-local.properties -d
   - docker pull alvrme/alpine-android:android-29
   - docker run -it -d --name test alvrme/alpine-android:android-29 bash
   - docker cp . test:/home/android
