@@ -8,9 +8,7 @@ import com.michaelbukachi.flightschedules.domain.models.FlightSchedule
 import com.michaelbukachi.flightschedules.domain.models.FlightSchedulePoint
 import com.michaelbukachi.flightschedules.domain.usecases.FlightsUseCase
 import com.michaelbukachi.flightschedules.utils.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,41 +24,40 @@ class SelectionViewModel @Inject constructor(private val flightsUseCase: Flights
     var destinationIndex = 0
 
 
-    suspend fun fetchAirports() = withContext(Dispatchers.IO) {
+    suspend fun fetchAirports() {
         val airports = flightsUseCase.getAirports()
         if (airports.isNotEmpty()) {
-            airportsFetched.postValue(airports)
+            airportsFetched.value = airports
             originAirport = flightsUseCase.getDefaultAirport()
             destinationAirport = flightsUseCase.getDefaultAirport()
         } else {
-            showMessage.postValue("No data found.")
+            showMessage.value = "No data found."
         }
-        flightSchedule.postValue(emptyList())
+        flightSchedule.value = emptyList()
     }
 
     fun fetchSchedules() = viewModelScope.launch {
         if (originAirport?.code == destinationAirport?.code) {
             showMessage.value = "Origin and Destination cannot be the same"
-            flightSchedule.postValue(emptyList())
+            flightSchedule.value = emptyList()
             return@launch
         }
 
         isLoading.value = true
-        withContext(Dispatchers.IO) {
-            val schedules = flightsUseCase.getFlightSchedules(originAirport!!.code, destinationAirport!!.code)
-            isLoading.postValue(false)
-            if (schedules.isNotEmpty()) {
-                flightSchedule.postValue(schedules)
-            } else {
-                flightSchedule.postValue(emptyList())
-                showMessage.postValue("No data found.")
-            }
+        val schedules =
+            flightsUseCase.getFlightSchedules(originAirport!!.code, destinationAirport!!.code)
+        isLoading.value = false
+        if (schedules.isNotEmpty()) {
+            flightSchedule.value = schedules
+        } else {
+            flightSchedule.value = emptyList()
+            showMessage.value = "No data found."
         }
     }
 
-    suspend fun getAirport(code: String): Airport? = withContext(Dispatchers.IO) {
+    suspend fun getAirport(code: String): Airport? {
         Timber.i("Getting airport details for $code")
-        return@withContext flightsUseCase.getAirportDetails(code)
+        return flightsUseCase.getAirportDetails(code)
     }
 
     suspend fun getAirportsFromSchedule(points: List<FlightSchedulePoint>): List<Airport> {

@@ -106,6 +106,8 @@ dependencies {
     testImplementation("androidx.test:rules:1.2.0")
     testImplementation("io.mockk:mockk:1.9.3")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.1")
+    testImplementation("com.jraska.livedata:testing-ktx:1.1.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
 
     debugImplementation("androidx.fragment:fragment-testing:1.1.0-rc03") {
         exclude(mapOf("group" to "androidx.test", "module" to "core"))
